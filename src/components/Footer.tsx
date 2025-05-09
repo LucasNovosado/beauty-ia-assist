@@ -1,5 +1,5 @@
 
-import { Whatsapp } from "lucide-react";
+import { MessageCircle } from "lucide-react";
 
 const Footer = () => {
   return (
@@ -54,7 +54,7 @@ const Footer = () => {
         className="float-whatsapp"
         aria-label="Contato por WhatsApp"
       >
-        <Whatsapp size={24} />
+        <MessageCircle size={24} />
       </a>
     </footer>
   );
