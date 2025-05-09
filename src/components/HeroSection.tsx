@@ -32,20 +32,12 @@ const HeroSection = () => {
           
           <div className="relative slide-in-right">
             <div className="relative mx-auto max-w-md lg:max-w-none">
-              {/* Placeholder for illustration */}
-              <div className="aspect-[4/3] bg-lavender/20 rounded-xl overflow-hidden flex items-center justify-center">
-                <div className="text-center p-8">
-                  <div className="w-16 h-16 mx-auto mb-4 bg-lavender rounded-full flex items-center justify-center">
-                    <img
-                      src="/lovable-uploads/2fbb8fdc-7917-459b-a603-9eff367e0e83.png"
-                      alt="Beauty.IA"
-                      className="w-10 h-10"
-                    />
-                  </div>
-                  <p className="text-blacklux/70 text-sm">
-                    [Ilustração de esteticista atendendo pelo celular]
-                  </p>
-                </div>
+              <div className="aspect-[4/3] rounded-xl overflow-hidden">
+                <img 
+                  src="/lovable-uploads/c29d6e52-a9ba-4b72-bed2-e6d2127af8a8.png"
+                  alt="Esteticista robótica atendendo pelo celular"
+                  className="w-full h-full object-cover"
+                />
               </div>
               
               {/* Decorative elements */}
