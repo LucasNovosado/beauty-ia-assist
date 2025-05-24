@@ -1,40 +1,48 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, MemoryRouter } from "react-router-dom";
 import { useClientOnly } from "./hooks/useClientOnly";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
-const AppContent = () => {
+// Componente de rotas separado
+const AppRoutes = () => (
+  <Routes>
+    <Route path="/" element={<Index />} />
+    <Route path="*" element={<NotFound />} />
+  </Routes>
+);
+
+const AppContent = ({ url }: { url?: string }) => {
   const isClient = useClientOnly();
 
-  // Durante SSR, renderiza apenas a página sem roteador
+  // Durante o SSR, usar MemoryRouter (funciona no servidor)
   if (!isClient) {
-    return <Index />;
+    return (
+      <MemoryRouter initialEntries={[url || '/']}>
+        <AppRoutes />
+      </MemoryRouter>
+    );
   }
 
-  // No cliente, renderiza com roteador
+  // No cliente, usar BrowserRouter
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Index />} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
+      <AppRoutes />
     </BrowserRouter>
   );
 };
 
-const App = () => (
+const App = ({ url }: { url?: string } = {}) => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <AppContent />
+      <AppContent url={url} />
     </TooltipProvider>
   </QueryClientProvider>
 );
