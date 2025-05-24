@@ -1,16 +1,16 @@
 import { renderToString } from 'react-dom/server'
 import App from './App.tsx'
 
-export function render(url: string = '/') {
+export function render() {
   let html = '';
   
   try {
-    // Renderizar com URL para o StaticRouter
-    html = renderToString(<App url={url} />);
+    // Renderizar aplicação sem parâmetros (sempre renderiza Index durante SSR)
+    html = renderToString(<App />);
   } catch (error) {
     console.error('SSR Error:', error);
-    // Fallback: renderizar versão básica
-    html = renderToString(<App />);
+    // Fallback seguro
+    html = '<div id="root"></div>';
   }
   
   return { html }

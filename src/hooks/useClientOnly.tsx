@@ -1,10 +1,9 @@
 import { useEffect, useState } from 'react';
 
-export const useClientOnly = (initialValue: boolean = false) => {
-  const [isClient, setIsClient] = useState(initialValue);
+export const useClientOnly = () => {
+  const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
-    // Só executa no cliente
     setIsClient(true);
   }, []);
 
