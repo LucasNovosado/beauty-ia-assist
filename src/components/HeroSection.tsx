@@ -1,335 +1,91 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { MessageSquare, Sparkles, Zap } from "lucide-react";
+import { PlayCircle, Bot, Zap, Users, CheckCircle } from "lucide-react";
+import { useState, useEffect } from "react";
 
 const HeroSection = () => {
+  const [messageIndex, setMessageIndex] = useState(0);
+  
+  const [conversationIndex, setConversationIndex] = useState(0);
+  
+  const conversations = [
+    {
+      name: 'Juliana',
+      messages: [
+        { type: 'user', text: 'Olá, gostaria de saber sobre os horários', name: 'Juliana' },
+        { type: 'bot', text: 'Olá Juliana! Temos horários disponíveis hoje às 14h e 16h. Qual prefere?' },
+        { type: 'user', text: 'Prefiro às 14h' },
+        { type: 'bot', text: '✅ Agendado para hoje às 14h. Vou enviar um lembrete 1h antes.' }
+      ]
+    },
+    {
+      name: 'Carlos',
+      messages: [
+        { type: 'user', text: 'Oi, preciso remarcar minha consulta', name: 'Carlos' },
+        { type: 'bot', text: 'Oi Carlos! Claro, vou te ajudar. Para quando gostaria de remarcar?' },
+        { type: 'user', text: 'Pode ser na sexta-feira de manhã?' },
+        { type: 'bot', text: '✅ Perfeito! Remarcado para sexta-feira às 9h. Confirmado para você!' }
+      ]
+    },
+    {
+      name: 'Rafaela',
+      messages: [
+        { type: 'user', text: 'Boa tarde! Qual o valor da limpeza de pele?', name: 'Rafaela' },
+        { type: 'bot', text: 'Boa tarde Rafaela! A limpeza de pele custa R$ 120. Posso agendar para você?' },
+        { type: 'user', text: 'Sim, pode ser amanhã?' },
+        { type: 'bot', text: '✅ Agendado para amanhã às 15h. Até lá!' }
+      ]
+    }
+  ];
+
+  useEffect(() => {
+    const currentConversation = conversations[conversationIndex].messages;
+    let currentMessageIndex = 0;
+    let timeoutId: NodeJS.Timeout;
+
+    const showNextMessage = () => {
+      if (currentMessageIndex < currentConversation.length) {
+        setMessageIndex(currentMessageIndex);
+        currentMessageIndex++;
+        timeoutId = setTimeout(showNextMessage, 2000);
+      } else {
+        // Aguarda 5 segundos antes de iniciar próxima conversa
+        timeoutId = setTimeout(() => {
+          setConversationIndex((prev) => (prev + 1) % conversations.length);
+          setMessageIndex(0);
+        }, 5000);
+      }
+    };
+
+    timeoutId = setTimeout(showNextMessage, 1000);
+
+    const companyLogos = [
+    { name: 'TechCorp', width: 'w-20' },
+    { name: 'InnovateSoft', width: 'w-24' },
+    { name: 'DataSync', width: 'w-16' },
+    { name: 'CloudFlow', width: 'w-22' }
+  ];
+
+  return () => clearTimeout(timeoutId);
+  }, [conversationIndex]);
+
+  const currentConversation = conversations[conversationIndex];
+  const currentMessages = currentConversation.messages;
+
+  const companyLogos = [
+    { name: 'TechCorp', width: 'w-20' },
+    { name: 'InnovateSoft', width: 'w-24' },
+    { name: 'DataSync', width: 'w-16' },
+    { name: 'CloudFlow', width: 'w-22' }
+  ];
+
   return (
-    <section className="relative min-h-screen bg-gradient-to-br from-offwhite via-offwhite to-lavender/10 overflow-hidden">
-      {/* Animated Background */}
-      <div className="absolute inset-0">
-        {/* Neural Network Waves */}
-        <svg
-          className="absolute inset-0 w-full h-full"
-          viewBox="0 0 1200 800"
-          preserveAspectRatio="xMidYMid slice"
-        >
-          <defs>
-            <linearGradient id="wave1" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#5e40df" stopOpacity="0.1" />
-              <stop offset="30%" stopColor="#D4A5A5" stopOpacity="0.08" />
-              <stop offset="60%" stopColor="#9982f7" stopOpacity="0.12" />
-              <stop offset="100%" stopColor="#A8C9B4" stopOpacity="0.08" />
-            </linearGradient>
-            <linearGradient id="wave2" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#D6C8F1" stopOpacity="0.15" />
-              <stop offset="50%" stopColor="#9982f7" stopOpacity="0.1" />
-              <stop offset="100%" stopColor="#af7945" stopOpacity="0.08" />
-            </linearGradient>
-          </defs>
-          
-          {/* Primary Wave */}
-          <path
-            d="M0,400 Q300,200 600,400 T1200,400 L1200,800 L0,800 Z"
-            fill="url(#wave1)"
-            className="animate-[wave_8s_ease-in-out_infinite]"
-          />
-          
-          {/* Secondary Wave */}
-          <path
-            d="M0,450 Q400,250 800,450 T1600,450 L1600,800 L0,800 Z"
-            fill="url(#wave2)"
-            className="animate-[wave_12s_ease-in-out_infinite_reverse]"
-          />
-        </svg>
-
-        {/* Floating Sparkles */}
-        <div className="absolute inset-0">
-          {[...Array(8)].map((_, i) => (
-            <div
-              key={i}
-              className="absolute animate-float hidden md:block"
-              style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-                animationDelay: `${Math.random() * 5}s`,
-                animationDuration: `${3 + Math.random() * 4}s`,
-              }}
-            >
-              <Sparkles 
-                className={`w-3 h-3 text-lavender/25 opacity-50 animate-pulse`}
-                style={{ animationDelay: `${Math.random() * 2}s` }}
-              />
-            </div>
-          ))}
-        </div>
-
-        {/* Neural Network Lines */}
-        <svg className="absolute inset-0 w-full h-full opacity-15 hidden lg:block">
-          <g className="animate-[pulse_4s_ease-in-out_infinite]">
-            <path
-              d="M100,100 Q200,200 400,150 T700,200"
-              stroke="#5e40df"
-              strokeWidth="1"
-              fill="none"
-              className="opacity-40"
-            />
-            <path
-              d="M200,300 Q400,200 600,350 T900,300"
-              stroke="#9982f7"
-              strokeWidth="1"
-              fill="none"
-              className="opacity-40"
-            />
-            <path
-              d="M50,500 Q300,400 550,500 T850,450"
-              stroke="#af7945"
-              strokeWidth="1"
-              fill="none"
-              className="opacity-40"
-            />
-            <path
-              d="M150,150 Q350,250 650,200 T950,150"
-              stroke="#D6C8F1"
-              strokeWidth="1"
-              fill="none"
-              className="opacity-30"
-            />
-          </g>
-        </svg>
-      </div>
-
-      {/* Content */}
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Mobile First Layout */}
-        <div className="pt-10 pb-40 min-h-screen flex flex-col justify-center">
-          
-          {/* Mobile Content */}
-          <div className="lg:hidden text-center space-y-6">
-            {/* Badge */}
-            <div className="inline-flex items-center">
-              <Badge 
-                variant="outline" 
-                className="bg-white/70 backdrop-blur-sm border-lavender/30 text-blacklux px-4 py-2 rounded-full shadow-lg text-xs sm:text-sm"
-              >
-                <Zap className="w-3 h-3 mr-1 text-rose" />
-                Tecnologia inédita para estética
-              </Badge>
-            </div>
-
-            {/* Mobile Heading */}
-            <h1 className="text-3xl sm:text-4xl font-playfair font-bold leading-tight px-2">
-              <span className="bg-gradient-to-r from-blacklux via-[#5e40df] to-[#9982f7] bg-clip-text text-transparent animate-gradient-slow">
-                Automatize seu atendimento
-              </span>
-              <br />
-              <span className="bg-gradient-to-r from-sage via-[#af7945] to-rose bg-clip-text text-transparent animate-gradient-slow" style={{ animationDelay: '0.5s' }}>
-                sem perder o
-              </span>
-              <br />
-              <span className="bg-gradient-to-r from-rose via-[#9982f7] to-lavender bg-clip-text text-transparent animate-gradient-slow" style={{ animationDelay: '1s' }}>
-                toque humano.
-              </span>
-            </h1>
-
-            {/* Mobile Subtitle */}
-            <p className="text-base sm:text-lg text-blacklux/80 px-4 leading-relaxed">
-              Sua assistente virtual no WhatsApp 24h,
-              <span className="text-rose font-medium"> agendando consultas </span>
-              enquanto você foca na estética.
-            </p>
-
-            {/* Mobile Image */}
-            <div className="relative mx-auto max-w-sm">
-              <div className="relative bg-gradient-to-br from-white/40 to-white/10 backdrop-blur-sm rounded-2xl p-4 shadow-xl">
-                <div className="aspect-[4/3] rounded-xl overflow-hidden">
-                  <img 
-                    src="/lovable-uploads/c29d6e52-a9ba-4b72-bed2-e6d2127af8a8.png"
-                    alt="Esteticista robótica atendendo pelo celular"
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                
-                {/* Mobile Floating Elements - Smaller */}
-                <div className="absolute -top-3 -right-3 bg-gradient-to-br from-[#9982f7] to-[#5e40df] w-12 h-12 rounded-full shadow-md animate-pulse" />
-                <div className="absolute -bottom-3 -left-3 bg-gradient-to-br from-[#af7945] to-rose/60 w-10 h-10 rounded-full shadow-md animate-pulse" style={{ animationDelay: '1s' }} />
-                
-                {/* Mobile Badge */}
-                <div className="absolute -top-2 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full shadow-md border border-[#9982f7]/30 transform -rotate-2">
-                  <span className="text-xs font-semibold bg-gradient-to-r from-[#5e40df] to-[#af7945] bg-clip-text text-transparent flex items-center">
-                    <Sparkles className="w-3 h-3 mr-1 text-[#9982f7]" />
-                    IA
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            {/* Mobile CTA Buttons */}
-            <div className="flex flex-col gap-3 px-4">
-              <Button className="group bg-gradient-to-r from-rose to-[#af7945] hover:from-rose/90 hover:to-[#af7945]/90 text-white px-6 py-3 rounded-full font-medium shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 w-full text-sm sm:text-base">
-                <span className="flex items-center justify-center">
-                  Agendar demonstração
-                  <div className="ml-2 group-hover:ml-3 transition-all duration-300">
-                    <Sparkles className="w-4 h-4" />
-                  </div>
-                </span>
-              </Button>
-              
-              <Button 
-                variant="outline"
-                className="group bg-[#25D366]/10 border-[#25D366]/30 text-[#25D366] hover:bg-[#25D366] hover:text-white px-4 py-3 rounded-full font-medium shadow-lg transition-all duration-300 backdrop-blur-sm w-full text-sm sm:text-base"
-              >
-                <MessageSquare className="w-4 h-4 mr-2 group-hover:scale-110 transition-transform duration-300" />
-                WhatsApp
-              </Button>
-            </div>
-
-            {/* Mobile Stats */}
-            <div className="grid grid-cols-3 gap-4 pt-6 border-t border-lavender/20 mx-4">
-              {[
-                { value: "70%", label: "Redução faltas" },
-                { value: "24/7", label: "Disponível" },
-                { value: "5min", label: "Configuração" },
-              ].map((stat, index) => (
-                <div key={index} className="text-center">
-                  <div className="text-xl sm:text-2xl font-bold font-playfair text-rose">
-                    {stat.value}
-                  </div>
-                  <div className="text-xs sm:text-sm text-blacklux/70 font-medium">
-                    {stat.label}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Desktop Layout */}
-          <div className="hidden lg:grid lg:grid-cols-2 gap-12 items-center">
-            {/* Left Column - Text Content */}
-            <div className="space-y-8 text-left">
-              {/* Badge */}
-              <div className="inline-flex items-center">
-                <Badge 
-                  variant="outline" 
-                  className="bg-white/60 backdrop-blur-sm border-lavender/30 text-blacklux px-6 py-2 rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
-                >
-                  <Zap className="w-4 h-4 mr-2 text-rose" />
-                  Tecnologia inédita para clínicas de estética
-                </Badge>
-              </div>
-
-              {/* Main Heading */}
-              <h1 className="text-5xl xl:text-6xl font-playfair font-bold leading-tight">
-                <span className="bg-gradient-to-r from-blacklux via-[#5e40df] to-[#9982f7] bg-clip-text text-transparent animate-gradient-slow">
-                  Automatize seu atendimento
-                </span>
-                <br />
-                <span className="bg-gradient-to-r from-sage via-[#af7945] to-rose bg-clip-text text-transparent animate-gradient-slow" style={{ animationDelay: '0.5s' }}>
-                  sem perder o
-                </span>
-                <br />
-                <span className="bg-gradient-to-r from-rose via-[#9982f7] to-lavender bg-clip-text text-transparent animate-gradient-slow" style={{ animationDelay: '1s' }}>
-                  toque humano.
-                </span>
-              </h1>
-
-              {/* Subtitle */}
-              <p className="text-xl text-blacklux/80 max-w-lg leading-relaxed">
-                Sua assistente virtual que conversa com seus clientes no WhatsApp 24h por dia,
-                <span className="text-rose font-medium"> agendando consultas e lembretes </span>
-                enquanto você foca na arte da estética.
-              </p>
-
-              {/* CTA Buttons */}
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Button className="group bg-gradient-to-r from-rose to-[#af7945] hover:from-rose/90 hover:to-[#af7945]/90 text-white px-8 py-4 rounded-full font-medium text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 relative overflow-hidden">
-                  <span className="relative z-10 flex items-center">
-                    Agendar demonstração
-                    <div className="ml-2 group-hover:ml-4 transition-all duration-300">
-                      <Sparkles className="w-5 h-5" />
-                    </div>
-                  </span>
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-500" />
-                </Button>
-                
-                <Button 
-                  variant="outline"
-                  className="group bg-[#25D366]/10 border-[#25D366]/30 text-[#25D366] hover:bg-[#25D366] hover:text-white px-6 py-4 rounded-full font-medium shadow-lg hover:shadow-xl transition-all duration-300 backdrop-blur-sm"
-                >
-                  <MessageSquare className="w-5 h-5 mr-2 group-hover:scale-110 transition-transform duration-300" />
-                  Fale conosco pelo WhatsApp
-                </Button>
-              </div>
-
-              {/* Stats Preview */}
-              <div className="grid grid-cols-3 gap-8 pt-8 border-t border-lavender/20">
-                {[
-                  { value: "70%", label: "Redução em faltas" },
-                  { value: "24/7", label: "Disponibilidade" },
-                  { value: "5min", label: "Tempo de configuração" },
-                ].map((stat, index) => (
-                  <div key={index} className="text-center">
-                    <div className="text-3xl font-bold font-playfair text-rose">
-                      {stat.value}
-                    </div>
-                    <div className="text-sm text-blacklux/70 font-medium">
-                      {stat.label}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Right Column - Visual */}
-            <div className="relative">
-              <div className="relative">
-                {/* Main Image Container */}
-                <div className="relative bg-gradient-to-br from-white/40 to-white/10 backdrop-blur-sm rounded-3xl p-8 shadow-2xl">
-                  <div className="aspect-[4/3] rounded-2xl overflow-hidden">
-                    <img 
-                      src="/lovable-uploads/c29d6e52-a9ba-4b72-bed2-e6d2127af8a8.png"
-                      alt="Esteticista robótica atendendo pelo celular"
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  
-                  {/* Floating Elements */}
-                  <div className="absolute -top-6 -right-6 bg-gradient-to-br from-[#9982f7] to-[#5e40df] w-20 h-20 rounded-full shadow-lg animate-bounce" style={{ animationDelay: '0.5s' }} />
-                  <div className="absolute -bottom-8 -left-8 bg-gradient-to-br from-[#af7945] to-rose/60 w-16 h-16 rounded-full shadow-lg animate-bounce" style={{ animationDelay: '1s' }} />
-                  <div className="absolute top-1/4 -left-4 bg-gradient-to-br from-sage to-[#9982f7] w-12 h-12 rounded-full shadow-lg animate-pulse" />
-                  
-                  {/* Floating Badge */}
-                  <div className="absolute -top-4 left-6 bg-white/90 backdrop-blur-sm px-4 py-2 rounded-full shadow-lg border border-[#9982f7]/30 transform -rotate-3 animate-float">
-                    <span className="text-sm font-semibold bg-gradient-to-r from-[#5e40df] to-[#af7945] bg-clip-text text-transparent flex items-center">
-                      <Sparkles className="w-4 h-4 mr-1 text-[#9982f7]" />
-                      Inteligência Artificial
-                    </span>
-                  </div>
-                </div>
-
-                {/* Glow Effect */}
-                <div className="absolute inset-0 bg-gradient-to-r from-[#5e40df]/15 via-[#9982f7]/15 to-[#af7945]/15 rounded-3xl blur-3xl opacity-30 animate-pulse" />
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Custom Styles */}
-      <style jsx>{`
-        @keyframes wave {
-          0%, 100% { transform: translateY(0px); }
-          50% { transform: translateY(-20px); }
-        }
-        
+    <>
+      <style>{`
         @keyframes float {
           0%, 100% { transform: translateY(0px) rotate(0deg); }
           33% { transform: translateY(-10px) rotate(2deg); }
           66% { transform: translateY(-5px) rotate(-2deg); }
-        }
-        
-        @keyframes gradient {
-          0%, 100% { background-position: 0% 50%; }
-          50% { background-position: 100% 50%; }
         }
         
         @keyframes gradient-slow {
@@ -337,14 +93,18 @@ const HeroSection = () => {
           50% { background-position: 100% 50%; }
         }
         
-        .animate-gradient {
-          background-size: 200% 200%;
-          animation: gradient 3s ease infinite;
+        @keyframes slideIn {
+          from { opacity: 0; transform: translateY(20px); }
+          to { opacity: 1; transform: translateY(0); }
         }
         
         .animate-gradient-slow {
           background-size: 300% 300%;
           animation: gradient-slow 8s ease-in-out infinite;
+        }
+        
+        .animate-slideIn {
+          animation: slideIn 0.6s ease-out forwards;
         }
         
         @media (max-height: 700px) {
@@ -355,7 +115,348 @@ const HeroSection = () => {
           }
         }
       `}</style>
-    </section>
+
+      <section className="relative min-h-screen bg-gradient-to-br from-white via-lavender/5 to-rose/5 overflow-hidden">
+        {/* Animated Background */}
+        <div className="absolute inset-0">
+          {/* Tech Grid Pattern */}
+          <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg%20width%3D%2260%22%20height%3D%2260%22%20viewBox%3D%220%200%2060%2060%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%3Cg%20fill%3D%22none%22%20fill-rule%3D%22evenodd%22%3E%3Cg%20fill%3D%22%23D6C8F1%22%20fill-opacity%3D%220.03%22%3E%3Cpath%20d%3D%22m36%2034v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6%2034v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6%204V0H4v4H0v2h4v4h2V6h4V4H6z%22/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-20"></div>
+          
+          {/* Floating Particles */}
+          <div className="absolute inset-0">
+            {[...Array(12)].map((_, i) => (
+              <div
+                key={i}
+                className="absolute animate-float hidden md:block"
+                style={{
+                  left: `${Math.random() * 100}%`,
+                  top: `${Math.random() * 100}%`,
+                  animationDelay: `${Math.random() * 5}s`,
+                  animationDuration: `${3 + Math.random() * 4}s`,
+                }}
+              >
+                <div 
+                  className="w-2 h-2 bg-gradient-to-r from-lavender to-rose rounded-full opacity-20"
+                  style={{ animationDelay: `${Math.random() * 2}s` }}
+                />
+              </div>
+            ))}
+          </div>
+
+          {/* Circuit Lines */}
+          <svg className="absolute inset-0 w-full h-full opacity-5 hidden lg:block">
+            <defs>
+              <linearGradient id="circuit1" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#5e40df" />
+                <stop offset="50%" stopColor="#9982f7" />
+                <stop offset="100%" stopColor="#af7945" />
+              </linearGradient>
+            </defs>
+            <g className="animate-pulse" style={{ animationDuration: '6s' }}>
+              <path
+                d="M50,100 L200,100 L200,200 L350,200 L350,300 L500,300"
+                stroke="url(#circuit1)"
+                strokeWidth="2"
+                fill="none"
+                className="opacity-60"
+              />
+              <path
+                d="M700,150 L850,150 L850,250 L1000,250 L1000,350 L1150,350"
+                stroke="url(#circuit1)"
+                strokeWidth="2"
+                fill="none"
+                className="opacity-60"
+              />
+              <circle cx="200" cy="100" r="4" fill="#9982f7" className="animate-pulse" />
+              <circle cx="350" cy="200" r="4" fill="#af7945" className="animate-pulse" />
+              <circle cx="850" cy="150" r="4" fill="#5e40df" className="animate-pulse" />
+            </g>
+          </svg>
+        </div>
+
+        {/* Content */}
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="pt-10 pb-20 min-h-screen flex flex-col justify-center">
+            
+            {/* Mobile First Layout */}
+            <div className="lg:hidden text-center space-y-8">
+              {/* Badge */}
+              <div className="inline-flex items-center">
+                <Badge 
+                  variant="outline" 
+                  className="bg-white/80 backdrop-blur-sm border-lavender/40 text-blacklux px-4 py-2 rounded-full shadow-lg"
+                >
+                  <Bot className="w-4 h-4 mr-2 text-rose" />
+                  Líder em IA para Atendimento
+                </Badge>
+              </div>
+
+              {/* Mobile Headline */}
+              <h1 className="text-3xl sm:text-4xl font-playfair font-bold leading-tight px-2">
+                <span className="bg-gradient-to-r from-blacklux via-rose to-lavender bg-clip-text text-transparent">
+Agende mais clientes                 </span>
+                <br />
+                <span className="bg-gradient-to-r from-lavender via-sage to-rose bg-clip-text text-transparent">
+com a Beauty IA                </span>
+              </h1>
+
+              {/* Mobile Subtitle */}
+              <p className="text-base sm:text-lg text-blacklux/80 px-4 leading-relaxed">
+                Automatize conversas com clientes usando IA
+                <span className="text-rose font-medium"> treinada com seu próprio conhecimento</span>
+              </p>
+
+              {/* Mobile Chat Demo */}
+              <div className="relative mx-auto max-w-sm">
+                <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-4 shadow-xl border border-lavender/20">
+                  <div className="space-y-3 max-h-60 overflow-hidden">
+                    {currentMessages.slice(0, messageIndex + 1).map((message, idx) => (
+                      <div
+                        key={idx}
+                        className={`flex ${message.type === 'user' ? 'justify-end' : 'justify-start'} animate-slideIn`}
+                        style={{ animationDelay: `${idx * 0.5}s` }}
+                      >
+                        <div
+                          className={`max-w-[80%] p-3 rounded-2xl text-sm ${
+                            message.type === 'user'
+                              ? 'bg-gradient-to-r from-rose to-rose/80 text-white'
+                              : 'bg-gray-100 text-blacklux border-l-4 border-lavender'
+                          }`}
+                        >
+                          {message.type === 'bot' && <Bot className="w-4 h-4 inline mr-1 text-lavender" />}
+                          {message.type === 'user' && message.name && idx === 0 && (
+                            <div className="text-xs opacity-70 mb-1">{message.name}</div>
+                          )}
+                          {message.text}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  
+                  {/* Typing indicator */}
+                  <div className="flex items-center justify-start mt-3">
+                    <div className="bg-gray-100 rounded-2xl px-4 py-2">
+                      <div className="flex space-x-1">
+                        <div className="w-2 h-2 bg-lavender rounded-full animate-bounce"></div>
+                        <div className="w-2 h-2 bg-lavender rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                        <div className="w-2 h-2 bg-lavender rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Mobile CTA */}
+              <div className="flex flex-col gap-3 px-4">
+                <Button className="group bg-gradient-to-r from-rose to-lavender hover:from-rose/90 hover:to-lavender/90 text-white px-6 py-3 rounded-full font-medium shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 w-full">
+                  <span className="flex items-center justify-center">
+                    Demonstra
+                    <div className="ml-2 group-hover:ml-3 transition-all duration-300">
+                      <Zap className="w-4 h-4" />
+                    </div>
+                  </span>
+                </Button>
+                
+                <Button 
+                  variant="outline"
+                  className="group bg-white/80 border-lavender/40 text-blacklux hover:bg-lavender hover:text-white px-4 py-3 rounded-full font-medium shadow-lg transition-all duration-300 backdrop-blur-sm w-full"
+                >
+                  <PlayCircle className="w-4 h-4 mr-2 group-hover:scale-110 transition-transform duration-300" />
+                  Ver Demonstração
+                </Button>
+              </div>
+
+              {/* Social Proof */}
+              <div className="pt-6 border-t border-lavender/20 mx-4">
+                <p className="text-xs text-blacklux/60 mb-3">📈 Confiança de quem vende mais com atendimento inteligente</p>
+                <div className="flex justify-center items-center space-x-4 opacity-60">
+                  {companyLogos.map((logo, index) => (
+                    <div key={index} className={`${logo.width} h-8 bg-blacklux/20 rounded`}></div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Desktop Layout */}
+            <div className="hidden lg:grid lg:grid-cols-2 gap-12 items-center">
+              {/* Left Column - Text Content */}
+              <div className="space-y-8">
+                {/* Badge */}
+                <div className="inline-flex items-center">
+                  <Badge 
+                    variant="outline" 
+                    className="bg-white/70 backdrop-blur-sm border-lavender/40 text-blacklux px-6 py-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
+                  >
+                    <Bot className="w-5 h-5 mr-2 text-rose" />
+1° IA do Brasil para atendimentos de clínicas de estética                   </Badge>
+                </div>
+
+                {/* Main Headline */}
+                <h1 className="text-5xl xl:text-6xl font-playfair font-bold leading-tight">
+                  <span className="bg-gradient-to-r from-blacklux via-rose to-lavender bg-clip-text text-transparent animate-gradient-slow">
+Agende mais clientes                 </span>
+                  <br />
+                  <span className="bg-gradient-to-r from-lavender via-sage to-rose bg-clip-text text-transparent animate-gradient-slow" style={{ animationDelay: '0.5s' }}>
+                    com a Beauty IA
+                  </span>
+                </h1>
+
+                {/* Subtitle */}
+                <p className="text-xl text-blacklux/80 max-w-lg leading-relaxed">
+                  Automatize conversas com clientes usando IA
+                  <span className="text-rose font-medium"> treinada com seu próprio conhecimento. </span>
+                  Implemente em minutos, não em meses.
+                </p>
+
+                {/* Benefits List */}
+                <div className="space-y-3">
+                  {[
+                    'Responde como seu melhor funcionário',
+                    'Aprende com suas conversas reais',
+                    'Integra com WhatsApp, email e site'
+                  ].map((benefit, index) => (
+                    <div key={index} className="flex items-center space-x-3">
+                      <CheckCircle className="w-5 h-5 text-sage" />
+                      <span className="text-blacklux/80">{benefit}</span>
+                    </div>
+                  ))}
+                </div>
+
+                {/* CTA Buttons */}
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <Button className="group bg-gradient-to-r from-rose to-lavender hover:from-rose/90 hover:to-lavender/90 text-white px-8 py-4 rounded-full font-medium text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 relative overflow-hidden">
+                    <span className="relative z-10 flex items-center">
+                      Teste Grátis Agora
+                      <div className="ml-2 group-hover:ml-4 transition-all duration-300">
+                        <Zap className="w-5 h-5" />
+                      </div>
+                    </span>
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-500" />
+                  </Button>
+                  
+                  <Button 
+                    variant="outline"
+                    className="group bg-white/80 border-lavender/40 text-blacklux hover:bg-lavender hover:text-white px-6 py-4 rounded-full font-medium shadow-lg hover:shadow-xl transition-all duration-300 backdrop-blur-sm"
+                  >
+                    <PlayCircle className="w-5 h-5 mr-2 group-hover:scale-110 transition-transform duration-300" />
+                    Ver em Ação (2min)
+                  </Button>
+                </div>
+
+                {/* Social Proof */}
+                <div className="pt-8 border-t border-lavender/20">
+                  <div className="flex items-center space-x-6">
+                    <div className="flex -space-x-2">
+                      {[...Array(4)].map((_, i) => (
+                        <div key={i} className="w-8 h-8 rounded-full bg-gradient-to-r from-rose to-lavender border-2 border-white" />
+                      ))}
+                    </div>
+                    <div>
+                      <div className="flex space-x-4 mt-2 opacity-60">
+                        {companyLogos.map((logo, index) => (
+                          <div key={index} className={`${logo.width} h-6 bg-blacklux/20 rounded`}></div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Right Column - Interactive Demo */}
+              <div className="relative">
+                <div className="relative">
+                  {/* Main Demo Container */}
+                  <div className="relative bg-white/90 backdrop-blur-sm rounded-3xl p-8 shadow-2xl border border-lavender/20">
+                    {/* Header */}
+                    <div className="flex items-center justify-between mb-6">
+                      <div className="flex items-center space-x-3">
+                        <div className="w-3 h-3 bg-red-400 rounded-full"></div>
+                        <div className="w-3 h-3 bg-yellow-400 rounded-full"></div>
+                        <div className="w-3 h-3 bg-green-400 rounded-full"></div>
+                      </div>
+                      <Badge className="bg-gradient-to-r from-sage to-lavender text-white">
+                        <Bot className="w-3 h-3 mr-1" />
+                        IA Ativa
+                      </Badge>
+                    </div>
+
+                    {/* Chat Interface */}
+                    <div className="space-y-4 max-h-80 overflow-hidden">
+                      {currentMessages.slice(0, messageIndex + 1).map((message, idx) => (
+                        <div
+                          key={idx}
+                          className={`flex ${message.type === 'user' ? 'justify-end' : 'justify-start'} animate-slideIn`}
+                          style={{ animationDelay: `${idx * 0.5}s` }}
+                        >
+                          <div
+                            className={`max-w-[80%] p-4 rounded-2xl ${
+                              message.type === 'user'
+                                ? 'bg-gradient-to-r from-rose to-rose/80 text-white'
+                                : 'bg-gray-50 text-blacklux border-l-4 border-lavender'
+                            }`}
+                          >
+                            {message.type === 'bot' && <Bot className="w-4 h-4 inline mr-2 text-lavender" />}
+                            {message.type === 'user' && message.name && idx === 0 && (
+                              <div className="text-xs opacity-70 mb-1">{message.name}</div>
+                            )}
+                            {message.text}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                    
+                    {/* Typing Indicator */}
+                    <div className="flex items-center justify-start mt-4">
+                      <div className="bg-gray-50 rounded-2xl px-4 py-3 border-l-4 border-lavender">
+                        <div className="flex space-x-1">
+                          <div className="w-2 h-2 bg-lavender rounded-full animate-bounce"></div>
+                          <div className="w-2 h-2 bg-lavender rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                          <div className="w-2 h-2 bg-lavender rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Input Field */}
+                    <div className="mt-6 p-3 bg-gray-50 rounded-2xl border border-lavender/20">
+                      <div className="flex items-center space-x-3">
+                        <input 
+                          type="text" 
+                          placeholder="Digite sua mensagem..."
+                          className="flex-1 bg-transparent text-blacklux placeholder-blacklux/50 outline-none text-sm"
+                          disabled
+                        />
+                        <Button size="sm" className="bg-gradient-to-r from-rose to-lavender text-white rounded-xl">
+                          <Zap className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Floating Elements */}
+                  <div className="absolute -top-4 -right-4 bg-gradient-to-br from-lavender to-rose w-16 h-16 rounded-full shadow-lg animate-pulse flex items-center justify-center">
+                    <Users className="w-8 h-8 text-white" />
+                  </div>
+                  <div className="absolute -bottom-6 -left-6 bg-gradient-to-br from-sage to-lavender w-12 h-12 rounded-full shadow-lg animate-bounce" style={{ animationDelay: '1s' }}>
+                    <div className="w-full h-full rounded-full bg-gradient-to-br from-sage to-lavender animate-ping opacity-20"></div>
+                  </div>
+
+                  {/* Stats Panel */}
+                  <div className="absolute -bottom-4 right-8 bg-white/90 backdrop-blur-sm px-4 py-2 rounded-full shadow-lg border border-lavender/20">
+                    <div className="flex items-center space-x-2 text-sm">
+                      <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                      <span className="text-blacklux/80 font-medium">Atendendo {currentConversation.name}</span>
+                    </div>
+                  </div>
+
+                  {/* Glow Effect */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-rose/10 via-lavender/10 to-sage/10 rounded-3xl blur-3xl opacity-30 animate-pulse" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </>
   );
 };
 
