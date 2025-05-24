@@ -55,7 +55,7 @@ const plans = [
 
 const PlansSection = () => {
   const [isVisible, setIsVisible] = useState(false);
-  const sectionRef = useRef(null);
+  const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -231,7 +231,7 @@ const PlansSection = () => {
         </div>
       </div>
 
-      <style jsx>{`
+      <style>{`
         .bg-gradient-radial {
           background: radial-gradient(circle, var(--tw-gradient-stops));
         }

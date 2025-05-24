@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Bell, Calendar, Clock, MessageSquare, User, Users, ChevronLeft, ChevronRight, Sparkles, Bot } from 'lucide-react';
+import { useClientOnly } from '../hooks/useClientOnly';
 
 const benefits = [
   {
@@ -55,8 +56,9 @@ const benefits = [
 const BenefitsSection = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
-  const scrollContainerRef = useRef(null);
-  const sectionRef = useRef(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLElement>(null);
+  const isClient = useClientOnly();
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -77,6 +79,8 @@ const BenefitsSection = () => {
 
   // Auto-play carousel with proper cleanup
   useEffect(() => {
+    if (!isClient) return;
+    
     const interval = setInterval(() => {
       // Check if container is available before auto-advancing
       if (scrollContainerRef.current && !scrollContainerRef.current.matches(':hover')) {
@@ -85,17 +89,19 @@ const BenefitsSection = () => {
     }, 4000); // Change every 4 seconds
 
     return () => clearInterval(interval);
-  }, [currentIndex]);
+  }, [currentIndex, isClient]);
 
   // Handle scroll updates for carousel position
   useEffect(() => {
+    if (!isClient) return;
+    
     const container = scrollContainerRef.current;
     if (!container) return;
 
     const handleScroll = () => {
       // Throttle scroll handler for better performance
-      clearTimeout(container.scrollTimeout);
-      container.scrollTimeout = setTimeout(() => {
+      clearTimeout((container as any).scrollTimeout);
+      (container as any).scrollTimeout = setTimeout(() => {
         const containerRect = container.getBoundingClientRect();
         const containerCenter = containerRect.left + containerRect.width / 2;
         
@@ -104,7 +110,7 @@ const BenefitsSection = () => {
         
         // Find the card closest to center
         Array.from(container.children).forEach((child, index) => {
-          const childRect = child.getBoundingClientRect();
+          const childRect = (child as HTMLElement).getBoundingClientRect();
           const childCenter = childRect.left + childRect.width / 2;
           const distance = Math.abs(childCenter - containerCenter);
           
@@ -124,16 +130,18 @@ const BenefitsSection = () => {
     
     return () => {
       container.removeEventListener('scroll', handleScroll);
-      clearTimeout(container.scrollTimeout);
+      clearTimeout((container as any).scrollTimeout);
     };
-  }, [currentIndex]);
+  }, [currentIndex, isClient]);
 
-  const scrollToCard = (index) => {
+  const scrollToCard = (index: number) => {
+    if (!isClient) return;
+    
     const container = scrollContainerRef.current;
     if (!container || !container.children[index]) return;
     
     // Get actual card width including gap
-    const cardElement = container.children[index];
+    const cardElement = container.children[index] as HTMLElement;
     const containerRect = container.getBoundingClientRect();
     const cardRect = cardElement.getBoundingClientRect();
     
@@ -225,19 +233,23 @@ const BenefitsSection = () => {
         {/* Benefits Carousel */}
         <div className="relative">
           {/* Navigation Arrows - Desktop */}
-          <button
-            onClick={prevCard}
-            className="hidden md:flex absolute left-4 top-1/2 -translate-y-1/2 z-10 w-12 h-12 bg-white/10 backdrop-blur-md border border-white/20 rounded-full items-center justify-center text-gray-700 hover:bg-white/20 transition-all duration-300 group"
-          >
-            <ChevronLeft className="h-6 w-6 group-hover:scale-110 transition-transform" />
-          </button>
-          
-          <button
-            onClick={nextCard}
-            className="hidden md:flex absolute right-4 top-1/2 -translate-y-1/2 z-10 w-12 h-12 bg-white/10 backdrop-blur-md border border-white/20 rounded-full items-center justify-center text-gray-700 hover:bg-white/20 transition-all duration-300 group"
-          >
-            <ChevronRight className="h-6 w-6 group-hover:scale-110 transition-transform" />
-          </button>
+          {isClient && (
+            <>
+              <button
+                onClick={prevCard}
+                className="hidden md:flex absolute left-4 top-1/2 -translate-y-1/2 z-10 w-12 h-12 bg-white/10 backdrop-blur-md border border-white/20 rounded-full items-center justify-center text-gray-700 hover:bg-white/20 transition-all duration-300 group"
+              >
+                <ChevronLeft className="h-6 w-6 group-hover:scale-110 transition-transform" />
+              </button>
+              
+              <button
+                onClick={nextCard}
+                className="hidden md:flex absolute right-4 top-1/2 -translate-y-1/2 z-10 w-12 h-12 bg-white/10 backdrop-blur-md border border-white/20 rounded-full items-center justify-center text-gray-700 hover:bg-white/20 transition-all duration-300 group"
+              >
+                <ChevronRight className="h-6 w-6 group-hover:scale-110 transition-transform" />
+              </button>
+            </>
+          )}
 
           {/* Scrollable Container */}
           <div
@@ -313,21 +325,23 @@ const BenefitsSection = () => {
           </div>
 
           {/* Dots Indicator */}
-          <div className="flex justify-center gap-3 mt-8">
-            {benefits.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => scrollToCard(index)}
-                className={`
-                  w-3 h-3 rounded-full transition-all duration-300
-                  ${index === currentIndex 
-                    ? 'bg-gradient-to-r from-violet-500 to-purple-500 scale-125' 
-                    : 'bg-gray-300 hover:bg-gray-400'
-                  }
-                `}
-              />
-            ))}
-          </div>
+          {isClient && (
+            <div className="flex justify-center gap-3 mt-8">
+              {benefits.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => scrollToCard(index)}
+                  className={`
+                    w-3 h-3 rounded-full transition-all duration-300
+                    ${index === currentIndex 
+                      ? 'bg-gradient-to-r from-violet-500 to-purple-500 scale-125' 
+                      : 'bg-gray-300 hover:bg-gray-400'
+                    }
+                  `}
+                />
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Bottom CTA */}
@@ -349,7 +363,7 @@ const BenefitsSection = () => {
         </div>
       </div>
 
-      <style jsx>{`
+      <style>{`
         .scrollbar-hide {
           -ms-overflow-style: none;
           scrollbar-width: none;

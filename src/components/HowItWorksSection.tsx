@@ -92,7 +92,7 @@ const HowItWorksSection = () => {
         </div>
       </div>
 
-      <style jsx>{`
+      <style>{`
         .bg-gradient-radial {
           background: radial-gradient(circle, var(--tw-gradient-stops));
         }

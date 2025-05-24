@@ -23,7 +23,7 @@ const testimonials = [
 
 const TestimonialsSection = () => {
   const [isVisible, setIsVisible] = useState(false);
-  const sectionRef = useRef(null);
+  const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -146,7 +146,7 @@ const TestimonialsSection = () => {
         </div>
       </div>
 
-      <style jsx>{`
+      <style>{`
         .bg-gradient-radial {
           background: radial-gradient(circle, var(--tw-gradient-stops));
         }

@@ -3,7 +3,7 @@ import { Sparkles, ArrowRight, Bot } from "lucide-react";
 
 const LastCTA = () => {
   const [isVisible, setIsVisible] = useState(false);
-  const sectionRef = useRef(null);
+  const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -115,7 +115,7 @@ const LastCTA = () => {
         </div>
       </div>
 
-      <style jsx>{`
+      <style>{`
         .bg-gradient-radial {
           background: radial-gradient(circle, var(--tw-gradient-stops));
         }
