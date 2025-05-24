@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { Bell, Calendar, Clock, MessageSquare, User, Users, ChevronLeft, ChevronRight, Sparkles, Bot } from 'lucide-react';
 import { useClientOnly } from '../hooks/useClientOnly';
@@ -61,6 +62,8 @@ const BenefitsSection = () => {
   const isClient = useClientOnly();
 
   useEffect(() => {
+    if (!isClient) return;
+    
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -75,7 +78,7 @@ const BenefitsSection = () => {
     }
 
     return () => observer.disconnect();
-  }, []);
+  }, [isClient]);
 
   // Auto-play carousel with proper cleanup
   useEffect(() => {
@@ -173,16 +176,12 @@ const BenefitsSection = () => {
       ref={sectionRef}
       className="relative py-20 md:py-32 bg-gradient-to-br from-gray-50 via-violet-50/30 to-purple-50/30 overflow-hidden"
     >
-      {/* Animated Background Particles */}
+      {/* Static Background Elements - Always rendered */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-20 left-10 w-2 h-2 bg-indigo-400 rounded-full animate-pulse opacity-60"></div>
-        <div className="absolute top-40 right-20 w-3 h-3 bg-purple-400 rounded-full animate-pulse opacity-40" style={{ animationDelay: '1s' }}></div>
-        <div className="absolute bottom-32 left-1/4 w-1.5 h-1.5 bg-pink-400 rounded-full animate-pulse opacity-50" style={{ animationDelay: '2s' }}></div>
-        <div className="absolute bottom-20 right-1/3 w-2.5 h-2.5 bg-rose-400 rounded-full animate-pulse opacity-30" style={{ animationDelay: '3s' }}></div>
-        
-        {/* Floating shapes */}
-        <div className="absolute top-1/3 left-5 w-16 h-16 border border-indigo-200 rounded-full rotate-12 animate-spin opacity-20" style={{ animationDuration: '8s' }}></div>
-        <div className="absolute bottom-1/4 right-10 w-12 h-12 border border-purple-200 rounded-lg rotate-45 animate-spin opacity-15" style={{ animationDuration: '12s' }}></div>
+        <div className="absolute top-20 left-10 w-2 h-2 bg-indigo-400 rounded-full opacity-60"></div>
+        <div className="absolute top-40 right-20 w-3 h-3 bg-purple-400 rounded-full opacity-40"></div>
+        <div className="absolute bottom-32 left-1/4 w-1.5 h-1.5 bg-pink-400 rounded-full opacity-50"></div>
+        <div className="absolute bottom-20 right-1/3 w-2.5 h-2.5 bg-rose-400 rounded-full opacity-30"></div>
       </div>
 
       {/* Gradient Mesh Background */}
@@ -194,18 +193,10 @@ const BenefitsSection = () => {
       <div className="relative container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-16 md:mb-20">
-          <div 
-            className={`
-              transition-all duration-1000 ease-out
-              ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}
-            `}
-          >
+          <div className={`transition-all duration-1000 ease-out ${isClient && isVisible ? 'opacity-100 translate-y-0' : 'opacity-100 translate-y-0'}`}>
             <div className="inline-flex items-center gap-3 mb-6">
               <div className="relative">
                 <Bot className="h-8 w-8 text-indigo-600" />
-                <div className="absolute inset-0 animate-ping">
-                  <Bot className="h-8 w-8 text-indigo-400 opacity-20" />
-                </div>
               </div>
               <span className="text-sm font-semibold text-indigo-600 tracking-wider uppercase">
                 Tecnologia Inteligente
@@ -215,7 +206,7 @@ const BenefitsSection = () => {
             <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6">
               <span className="font-playfair">Benefícios que </span>
               <span className="relative">
-                <span className="animated-gradient-text from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent font-playfair">
+                <span className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent font-playfair">
                   Transformam
                 </span>
                 <div className="absolute -bottom-2 left-0 right-0 h-1 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 rounded-full opacity-30"></div>
@@ -232,7 +223,7 @@ const BenefitsSection = () => {
 
         {/* Benefits Carousel */}
         <div className="relative">
-          {/* Navigation Arrows - Desktop */}
+          {/* Navigation Arrows - Only render on client */}
           {isClient && (
             <>
               <button
@@ -267,45 +258,23 @@ const BenefitsSection = () => {
                   className="flex-none w-72 sm:w-80 md:w-96 snap-center"
                 >
                   <div 
-                    className={`
-                      group relative h-80 sm:h-96 md:h-[420px] p-6 md:p-8 
-                      transition-all duration-700 ease-out
-                      ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}
-                    `}
-                    style={{ transitionDelay: `${delay}ms` }}
+                    className={`group relative h-80 sm:h-96 md:h-[420px] p-6 md:p-8 transition-all duration-700 ease-out opacity-100 translate-y-0`}
                   >
                     {/* Glassmorphism Container */}
                     <div className="relative h-full bg-white/60 backdrop-blur-xl rounded-3xl border border-white/30 overflow-hidden hover:bg-white/70 transition-all duration-500 group-hover:scale-[1.02] group-hover:shadow-2xl group-hover:shadow-purple-500/10">
-                      
-                      {/* Animated Border Gradient */}
-                      <div className="absolute inset-0 rounded-3xl p-0.5 bg-gradient-to-r from-violet-500 via-purple-500 to-rose-500 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                        <div className="h-full w-full bg-white/70 backdrop-blur-xl rounded-3xl"></div>
-                      </div>
-                      
-                      {/* Background Glow */}
-                      <div className={`absolute inset-0 bg-gradient-to-br ${benefit.bgGlow} opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl`}></div>
                       
                       {/* Content */}
                       <div className="relative h-full flex flex-col justify-center items-center text-center p-4 md:p-8">
                         {/* Icon Container */}
                         <div className="relative mb-6 md:mb-8">
-                          <div className={`
-                            w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-gradient-to-br ${benefit.gradient} 
-                            flex items-center justify-center
-                            group-hover:scale-110 transition-transform duration-500
-                            shadow-lg group-hover:shadow-xl
-                          `}>
+                          <div className={`w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-gradient-to-br ${benefit.gradient} flex items-center justify-center group-hover:scale-110 transition-transform duration-500 shadow-lg group-hover:shadow-xl`}>
                             <IconComponent className="h-8 w-8 md:h-10 md:w-10 text-white" />
                           </div>
                           
-                          {/* Pulse Effect */}
-                          <div className={`
-                            absolute inset-0 rounded-2xl bg-gradient-to-br ${benefit.gradient}
-                            opacity-0 group-hover:opacity-40 animate-ping
-                          `}></div>
-                          
-                          {/* Sparkle Effect */}
-                          <Sparkles className="absolute -top-2 -right-2 h-5 w-5 md:h-6 md:w-6 text-yellow-400 opacity-0 group-hover:opacity-100 animate-pulse transition-opacity duration-300" />
+                          {/* Sparkle Effect - Only on client */}
+                          {isClient && (
+                            <Sparkles className="absolute -top-2 -right-2 h-5 w-5 md:h-6 md:w-6 text-yellow-400 opacity-0 group-hover:opacity-100 animate-pulse transition-opacity duration-300" />
+                          )}
                         </div>
                         
                         {/* Text Content */}
@@ -324,20 +293,17 @@ const BenefitsSection = () => {
             })}
           </div>
 
-          {/* Dots Indicator */}
+          {/* Dots Indicator - Only render on client */}
           {isClient && (
             <div className="flex justify-center gap-3 mt-8">
               {benefits.map((_, index) => (
                 <button
                   key={index}
                   onClick={() => scrollToCard(index)}
-                  className={`
-                    w-3 h-3 rounded-full transition-all duration-300
-                    ${index === currentIndex 
+                  className={`w-3 h-3 rounded-full transition-all duration-300 ${index === currentIndex 
                       ? 'bg-gradient-to-r from-violet-500 to-purple-500 scale-125' 
                       : 'bg-gray-300 hover:bg-gray-400'
-                    }
-                  `}
+                    }`}
                 />
               ))}
             </div>
@@ -345,19 +311,11 @@ const BenefitsSection = () => {
         </div>
 
         {/* Bottom CTA */}
-        <div 
-          className={`
-            text-center mt-16 transition-all duration-1000 ease-out delay-700
-            ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}
-          `}
-        >
+        <div className={`text-center mt-16 transition-all duration-1000 ease-out delay-700 opacity-100 translate-y-0`}>
           <div className="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-full font-semibold hover:from-indigo-700 hover:to-purple-700 transition-all duration-300 cursor-pointer group shadow-lg hover:shadow-xl">
             <span className="font-poppins">Experimente Grátis</span>
             <div className="relative">
               <Bot className="h-5 w-5 group-hover:scale-110 transition-transform" />
-              <div className="absolute inset-0 animate-ping opacity-30">
-                <Bot className="h-5 w-5" />
-              </div>
             </div>
           </div>
         </div>
@@ -374,60 +332,6 @@ const BenefitsSection = () => {
         
         .bg-gradient-radial {
           background: radial-gradient(circle, var(--tw-gradient-stops));
-        }
-        
-        /* Prevent horizontal overflow */
-        @media (max-width: 768px) {
-          .snap-x {
-            scroll-padding: 0 1rem;
-          }
-        }
-        
-        /* Animated gradient wave effect for text */
-        .animated-gradient-text {
-          background: linear-gradient(
-            90deg,
-            #5e40df,
-            #9982f7,
-            #a2c8b5,
-            #5e40df,
-            #9982f7,
-            #a2c8b5
-          );
-          background-size: 400% 100%;
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          background-clip: text;
-          color: transparent;
-          animation: gradientWave 4s ease-in-out infinite;
-          display: inline-block;
-        }
-        
-        /* Animated gradient for background line */
-        .animated-gradient-bg {
-          background: linear-gradient(
-            90deg,
-            #5e40df,
-            #9982f7,
-            #a2c8b5,
-            #5e40df,
-            #9982f7,
-            #a2c8b5
-          );
-          background-size: 400% 100%;
-          animation: gradientWave 4s ease-in-out infinite;
-        }
-        
-        @keyframes gradientWave {
-          0% {
-            background-position: 0% 50%;
-          }
-          50% {
-            background-position: 100% 50%;
-          }
-          100% {
-            background-position: 0% 50%;
-          }
         }
       `}</style>
     </section>
