@@ -13,11 +13,12 @@ const queryClient = new QueryClient();
 const AppContent = () => {
   const isClient = useClientOnly();
 
+  // Durante SSR, renderiza apenas a página sem roteador
   if (!isClient) {
-    // Durante o SSR, renderiza apenas o conteúdo da página inicial
     return <Index />;
   }
 
+  // No cliente, renderiza com roteador
   return (
     <BrowserRouter>
       <Routes>

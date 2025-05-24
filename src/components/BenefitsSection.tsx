@@ -176,7 +176,7 @@ const BenefitsSection = () => {
       ref={sectionRef}
       className="relative py-20 md:py-32 bg-gradient-to-br from-gray-50 via-violet-50/30 to-purple-50/30 overflow-hidden"
     >
-      {/* Static Background Elements - Always rendered */}
+      {/* Static Background Elements */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute top-20 left-10 w-2 h-2 bg-indigo-400 rounded-full opacity-60"></div>
         <div className="absolute top-40 right-20 w-3 h-3 bg-purple-400 rounded-full opacity-40"></div>
@@ -193,7 +193,7 @@ const BenefitsSection = () => {
       <div className="relative container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-16 md:mb-20">
-          <div className={`transition-all duration-1000 ease-out ${isClient && isVisible ? 'opacity-100 translate-y-0' : 'opacity-100 translate-y-0'}`}>
+          <div className="opacity-100 translate-y-0">
             <div className="inline-flex items-center gap-3 mb-6">
               <div className="relative">
                 <Bot className="h-8 w-8 text-indigo-600" />
@@ -250,16 +250,13 @@ const BenefitsSection = () => {
           >
             {benefits.map((benefit, index) => {
               const IconComponent = benefit.icon;
-              const delay = index * 150;
               
               return (
                 <div
                   key={benefit.id}
                   className="flex-none w-72 sm:w-80 md:w-96 snap-center"
                 >
-                  <div 
-                    className={`group relative h-80 sm:h-96 md:h-[420px] p-6 md:p-8 transition-all duration-700 ease-out opacity-100 translate-y-0`}
-                  >
+                  <div className="group relative h-80 sm:h-96 md:h-[420px] p-6 md:p-8 opacity-100 translate-y-0">
                     {/* Glassmorphism Container */}
                     <div className="relative h-full bg-white/60 backdrop-blur-xl rounded-3xl border border-white/30 overflow-hidden hover:bg-white/70 transition-all duration-500 group-hover:scale-[1.02] group-hover:shadow-2xl group-hover:shadow-purple-500/10">
                       
@@ -311,7 +308,7 @@ const BenefitsSection = () => {
         </div>
 
         {/* Bottom CTA */}
-        <div className={`text-center mt-16 transition-all duration-1000 ease-out delay-700 opacity-100 translate-y-0`}>
+        <div className="text-center mt-16 opacity-100 translate-y-0">
           <div className="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-full font-semibold hover:from-indigo-700 hover:to-purple-700 transition-all duration-300 cursor-pointer group shadow-lg hover:shadow-xl">
             <span className="font-poppins">Experimente Grátis</span>
             <div className="relative">
