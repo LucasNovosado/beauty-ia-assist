@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from "react";
 import { ChevronDown, HelpCircle, Search, MessageSquare, Send } from "lucide-react";
 
@@ -36,7 +37,7 @@ const FAQSection = () => {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [isVisible, setIsVisible] = useState(false);
-  const sectionRef = useRef(null);
+  const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -235,7 +236,7 @@ const FAQSection = () => {
         </div>
       </div>
 
-      <style jsx>{`
+      <style>{`
         .bg-gradient-radial {
           background: radial-gradient(circle, var(--tw-gradient-stops));
         }
